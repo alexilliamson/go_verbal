@@ -1,26 +1,23 @@
 require 'spec_helper'
+require 'go_verbal'
 
-module GoVerbal
-  RSpec.describe "when looking for congressional record text URLs" do
-      context "by searching the GPO Site's NavMenu" do
-        it "the first yielded result is a text_page_url" do
-          gpo_nav_menu = GoVerbal.load_nav_menu
+RSpec.describe "Each page containing congressional record text" do
+  context "for a given date" do
+    it "can be found using the ConRecordIndex" do
+      index = GoVerbal.get_con_record_index
+      date = date_with_record_text
 
-          search_result = search_menu_until_result(gpo_nav_menu)
-        
-          expect(search_result).to be_a_kind_of(TextPageURL)
-        end
+      urls = index.pages(date: date)
+
+      expect(urls).to include(a_kind_of(text_page_url_class))
     end
 
-    def search_menu_until_result(menu)
-      result = :not_a_url
+    def date_with_record_text
+      Date.new(2016,1,6)
+    end
 
-      menu.search_for_text_page_urls do |yielded_thing|
-          result =  yielded_thing
-          break
-      end
-
-      return result
+    def text_page_url_class
+      text_page_url_class = GoVerbal::TextPageURL
     end
   end
 end

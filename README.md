@@ -13,3 +13,5 @@ Bundler installed, first spec copied over
 Spec runs on command line after adding spec_helper file and adding VCR, bundler, and RSpec configs.
 
 Spec runs in sublime text after running sublimeText from commandLine instead of Dock.
+
+Created the GoVerbal file.  Runs again!
