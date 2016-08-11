@@ -29,6 +29,23 @@ module GoVerbal
       end
     end
 
+    describe "#go_to_root" do
+      it "sends :root to NavMenuMapper with html" do
+        site = GPOSite.new
+
+        expect(NavMenuMapper).to receive(:root).with(a_kind_of(HTMLDoc))
+
+        root = site.go_to_root
+      end
+
+      it "sets a new nav_menu" do
+        site = GPOSite.new
+        site.go_to_root
+
+        expect(site.nav_menu).to be_a_kind_of(NavMenu)
+      end
+    end
+
     def get_valid_url
       "https://www.google.com/images"
     end

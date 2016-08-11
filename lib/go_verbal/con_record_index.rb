@@ -3,13 +3,15 @@ require_relative 'con_record_index/crawler'
 module GoVerbal
   class ConRecordIndex
     def pages(date:)
-      index_date = crawler.find_index_date(date)#IndexDate.new(date: date)
+      index_date = crawler.go_to_date(date)#IndexDate.new(date: date)
 
       get_pages_by_date(index_date)
     end
 
     def crawler
-      @crawler ||= Crawler.new
+      site = GPOSite.new
+
+      @crawler ||= Crawler.new(site)
     end
 
     def get_pages_by_date(date)
