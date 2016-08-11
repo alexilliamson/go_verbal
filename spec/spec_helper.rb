@@ -1,6 +1,8 @@
 require 'bundler/setup'
 Bundler.require(:test)
 
+require 'factories'
+
 RSpec.configure do |config|
   config.color = true
 
