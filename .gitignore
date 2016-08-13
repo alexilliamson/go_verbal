@@ -2,3 +2,4 @@ goverbal.sublime-project
 goverbal.sublime-workspace
 Gemfile.lock
 *.DS_Store
+spec/cassettes/*

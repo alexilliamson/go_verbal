@@ -1,5 +1,5 @@
 require 'bundler/setup'
-Bundler.require(:test)
+Bundler.require(:default, :test)
 
 require 'factories'
 
@@ -16,6 +16,6 @@ end
 
 VCR.configure do |c|
   c.cassette_library_dir = 'spec/cassettes'
-  # c.hook_into :webmock
+  c.hook_into :webmock
   c.configure_rspec_metadata!
 end

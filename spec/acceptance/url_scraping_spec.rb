@@ -3,7 +3,7 @@ require 'go_verbal'
 
 RSpec.describe "Each page containing congressional record text" do
   context "for a given date" do
-    it "can be found using the ConRecordIndex" do
+    skip "can be found using the ConRecordIndex" do
       index = GoVerbal.get_con_record_index
       date = date_with_record_text
 

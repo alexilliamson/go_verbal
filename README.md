@@ -15,3 +15,6 @@ Spec runs on command line after adding spec_helper file and adding VCR, bundler,
 Spec runs in sublime text after running sublimeText from commandLine instead of Dock.
 
 Created the GoVerbal file.  Runs again!
+
+#Update 2016_08_15
+I had to narrow the scope of my first feature test, so I put "url scraping" to the side for a while, and am now working on "building a nav menu".  So far this is working out well.  Hopefully I will finish this week!

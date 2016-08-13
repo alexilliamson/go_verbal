@@ -1,11 +1,11 @@
-require_relative 'con_record_index/index_date'
-require_relative 'con_record_index/crawler'
+require_relative 'crawler'
+
 module GoVerbal
   class ConRecordIndex
     def pages(date:)
-      index_date = crawler.go_to_date(date)#IndexDate.new(date: date)
+      nav_menu = crawler.go_to_date(date)#IndexDate.new(date: date)
 
-      get_pages_by_date(index_date)
+      get_pages_by_date(nav_menu)
     end
 
     def crawler
@@ -14,9 +14,9 @@ module GoVerbal
       @crawler ||= Crawler.new(site)
     end
 
-    def get_pages_by_date(date)
+    def get_pages_by_date(nav_menu)
       page_collection = new_page_collection
-      sections = date.sections
+      sections = nav_menu.sections
 
       sections.each do |section|
         section_pages = section.text_pages

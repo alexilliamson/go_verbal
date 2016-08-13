@@ -1,5 +1,3 @@
-require_relative "index_date"
-
 module GoVerbal
   class Crawler
     attr_accessor :site
