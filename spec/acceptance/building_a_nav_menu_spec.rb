@@ -28,6 +28,8 @@ RSpec.describe "A NavMenu built" do
       current_year = current_date.year
       first_recorded_year = 1994
 
-      (first_recorded_year..current_year).to_a
+      years = (first_recorded_year..current_year).to_a
+
+      years.map(&:to_s)
     end
   end

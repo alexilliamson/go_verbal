@@ -22,7 +22,7 @@ module GoVerbal
     def get_page(url: )
       internet = Internet.new
 
-      internets = internet.give_me(url)
+      internet.give_me(url)
     end
 
     def go_to_year(year)

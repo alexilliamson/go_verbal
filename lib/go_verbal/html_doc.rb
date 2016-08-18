@@ -13,11 +13,15 @@ module GoVerbal
       content.css(matcher)
     end
 
+    def has_content?
+      content.length > 0
+    end
+
     def class_selector_string(selector, css_class)
       selector_string = selector.to_s
       class_string = css_class.to_s
 
-      selector_string + "." + class_string
+      selector_string + "[@class='" + class_string + "']"
     end
   end
 end

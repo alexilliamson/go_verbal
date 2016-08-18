@@ -1,5 +1,6 @@
 require_relative 'html_doc'
 require_relative 'net_http_wrapper'
+require_relative 'nokogiri_html_doc_wrapper'
 
 module GoVerbal
   class Internet
@@ -25,7 +26,7 @@ module GoVerbal
 
     def extract_data(response)
       body = response.body
-      nokogiri = Nokogiri::HTML(body)
+      nokogiri = NokogiriHTMLDocWrapper.new(body)
     end
   end
 end

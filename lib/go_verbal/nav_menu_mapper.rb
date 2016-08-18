@@ -18,11 +18,13 @@ module GoVerbal
       elements = gpo_site.browse_level_links
       index_years = elements.map{ |element| parse(element)}
 
-      @nav_menu = NavMenu.new(years: index_years)
+      @nav_menu = NavMenu.new(years: index_years.reverse)
     end
 
     def parse(element)
-      {text: element.text}
+      element_text = element.text
+      text = element_text.to_s
+      text.strip
     end
 
     def extract_year_nodes(nav_menu)

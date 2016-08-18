@@ -22,15 +22,13 @@ module GoVerbal
     end
 
     describe "#parse" do
-      context "when given something with text" do
-        it "extracts" do
-          text = double
-          element = double(text: text)
-          nav_menu_mapper = NavMenuMapper.new
+      it "extracts texts and strips whitespace" do
+        text = double
+        element = double(text: "\t\t\ntext\t\t\n")
+        nav_menu_mapper = NavMenuMapper.new
 
-          extract = nav_menu_mapper.parse(element)
-          expect(extract).to eq(text: text)
-        end
+        extract = nav_menu_mapper.parse(element)
+        expect(extract).to eq("text")
       end
     end
   end
