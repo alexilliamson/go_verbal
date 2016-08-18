@@ -7,18 +7,17 @@ module GoVerbal
     end
 
     def div(options)
-      id = options[:id]
-      matcher = selector_string(:div, id: id)
+      css_class = options[:css_class]
+      matcher = class_selector_string(:div, css_class)
 
       content.css(matcher)
     end
 
-    def selector_string(selector, options = {})
-      id = options[:id]
+    def class_selector_string(selector, css_class)
       selector_string = selector.to_s
-      id_string = id.to_s
+      class_string = css_class.to_s
 
-      selector_string + "#" + id_string
+      selector_string + "." + class_string
     end
   end
 end

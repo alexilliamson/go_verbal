@@ -60,6 +60,17 @@ module GoVerbal
       end
     end
 
+    describe "#lookup_div_class" do
+      context "given :year" do
+        it "is \"level1 browse-level\"" do
+          site = GPOSite.new
+
+          div_class = site.lookup_div_class(:year)
+          expect(div_class).to eq("level1 browse-level")
+        end
+      end
+    end
+
     def years_since_1994
       current_date = Date.today
       current_year = current_date.year

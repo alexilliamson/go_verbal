@@ -18,3 +18,6 @@ Created the GoVerbal file.  Runs again!
 
 #Update 2016_08_15
 I had to narrow the scope of my first feature test, so I put "url scraping" to the side for a while, and am now working on "building a nav menu".  So far this is working out well.  Hopefully I will finish this week!
+
+#Update 2016_08_18
+Once again, I have reached the point where my acceptance test is failing but it's not clear why.  So, once again, I narrow the focus of my acceptance test to the GPOSite.

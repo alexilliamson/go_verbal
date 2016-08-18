@@ -20,5 +20,18 @@ module GoVerbal
         end
       end
     end
+
+    describe "#parse" do
+      context "when given something with text" do
+        it "extracts" do
+          text = double
+          element = double(text: text)
+          nav_menu_mapper = NavMenuMapper.new
+
+          extract = nav_menu_mapper.parse(element)
+          expect(extract).to eq(text: text)
+        end
+      end
+    end
   end
 end

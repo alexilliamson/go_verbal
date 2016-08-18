@@ -35,6 +35,22 @@ module GoVerbal
 
         internet.give_me(url)
       end
+
+      it "returns an HTMLDoc" do
+        url = "https://www.google.com/images"
+        http = double
+        allow(http).to receive(:request)
+        get_request = double
+
+        net_http_library = instance_double(NetHTTPWrapper, get: get_request)
+        allow(net_http_library).to receive(:start).and_yield(http)
+
+        internet = Internet.new(net_http_library)
+        allow(internet).to receive(:extract_data)
+
+        returned_thing = internet.give_me(url)
+        expect(returned_thing).to be_a_kind_of(HTMLDoc)
+      end
     end
 
     describe "extract_data" do

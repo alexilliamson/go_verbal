@@ -23,7 +23,6 @@ module GoVerbal
       internet = Internet.new
 
       internets = internet.give_me(url)
-      internets.html
     end
 
     def go_to_year(year)
@@ -45,8 +44,14 @@ module GoVerbal
     def extract_nav_menu(page)
     end
 
-    def browse_level_links(browse_level_id)
-      current_page.div(:id => browse_level_id)
+    def browse_level_links
+      div_class = lookup_div_class(:year)
+      current_page.div(:css_class => div_class)
+    end
+
+    def lookup_div_class(key)
+      div_classes = {year: "level1 browse-level"}
+      div_classes[key]
     end
   end
 end

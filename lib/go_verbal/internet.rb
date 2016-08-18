@@ -17,15 +17,15 @@ module GoVerbal
       library.start(host, port,:use_ssl=>true) do |http|
         request = library.get(uri)
         response = http.request(request)
-        extract_data(response)
+        content = extract_data(response)
+
+        return HTMLDoc.new(content)
       end
     end
 
     def extract_data(response)
       body = response.body
       nokogiri = Nokogiri::HTML(body)
-
-      OpenStruct.new(html: HTMLDoc.new(nokogiri))
     end
   end
 end

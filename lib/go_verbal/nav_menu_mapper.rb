@@ -15,24 +15,18 @@ module GoVerbal
     end
 
     def build
-      div_id = lookup_div_id(:year)
-
-      links = gpo_site.browse_level_links(id: div_id)
-      index_years = links.map{ |link| parse(link)}
+      elements = gpo_site.browse_level_links
+      index_years = elements.map{ |element| parse(element)}
 
       @nav_menu = NavMenu.new(years: index_years)
     end
 
-    def parse(link)
+    def parse(element)
+      {text: element.text}
     end
 
     def extract_year_nodes(nav_menu)
       # [nil]
-    end
-
-    def lookup_div_id(key)
-      div_ids = {year: nil}
-      div_ids[key]
     end
   end
 end
