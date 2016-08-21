@@ -1,5 +1,3 @@
-require_relative 'html_doc'
-
 module GoVerbal
   class NetHTTPWrapper
     def initialize

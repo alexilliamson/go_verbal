@@ -1,57 +1,35 @@
-require_relative 'nav_menu_mapper'
-require_relative 'internet'
+require_relative 'browser'
 
 module GoVerbal
   ROOT_URL = "https://www.gpo.gov/fdsys/browse/collection.action?collectionCode=CREC"
 
   class GPOSite
-
-    attr_accessor :nav_menu
     attr_reader :current_page
+    attr_accessor :menu_css_classes
 
     def initialize
+      @menu_css_classes = ["level1 browse-level"]
+
       yield self if block_given?
     end
 
     def go_to_root
-      @current_page = get_page(url: ROOT_URL)
-      # @nav_menu = current_page.buttons
-      # NavMenuMapper.build
+      root_page = browser.go_to(ROOT_URL)
+      set_current_page(root_page)
     end
 
-    def get_page(url: )
-      internet = Internet.new
-
-      internet.give_me(url)
+    def menu_links
+      current_page.menu(menu_css_classes)
     end
 
-    def go_to_year(year)
+    def browser
+      Browser
     end
 
-    def go_to_month(month)
-    end
+    private
 
-    def go_to_date(date)
-    end
-
-    def convert_to_uri(url)
-      URI(url)
-    end
-
-    def nav_menu_html
-    end
-
-    def extract_nav_menu(page)
-    end
-
-    def browse_level_links
-      div_class = lookup_div_class(:year)
-      current_page.div(:css_class => div_class)
-    end
-
-    def lookup_div_class(key)
-      div_classes = {year: "level1 browse-level"}
-      div_classes[key]
+    def set_current_page(page)
+      @current_page = page
     end
   end
 end

@@ -1,5 +1,5 @@
 require 'spec_helper'
-require 'go_verbal/nav_menu_mapper'
+# require 'go_verbal/nav_menu_mapper'
 
 module GoVerbal
   RSpec.describe Internet do
@@ -22,34 +22,40 @@ module GoVerbal
 
       it "makes an HTTP request using wrapper's get method with a kind of Nokogiri::HTML" do
         url = "https://www.google.com/images"
-        http = double
-        get_request = double
+        http = mock_http
+        net = mock_net
+        allow(net).to receive(:start).and_yield(http)
 
-        net_http_library = instance_double(NetHTTPWrapper, get: get_request)
-        allow(net_http_library).to receive(:start).and_yield(http)
+        internet = Internet.new(net)
 
-        internet = Internet.new(net_http_library)
-        allow(internet).to receive(:extract_data)
 
-        expect(http).to receive(:request).with(get_request)
+        expect(http).to receive(:request)
 
         internet.give_me(url)
       end
 
-      it "returns an HTMLDoc" do
+      it "returns a NokogiriHTMLDocWrapper" do
         url = "https://www.google.com/images"
-        http = double
-        allow(http).to receive(:request)
-        get_request = double
+        http = mock_http
+        net = mock_net
+        allow(net).to receive(:start).and_yield(http)
 
-        net_http_library = instance_double(NetHTTPWrapper, get: get_request)
-        allow(net_http_library).to receive(:start).and_yield(http)
-
-        internet = Internet.new(net_http_library)
-        allow(internet).to receive(:extract_data)
+        internet = Internet.new(net)
 
         returned_thing = internet.give_me(url)
-        expect(returned_thing).to be_a_kind_of(HTMLDoc)
+
+        expect(returned_thing).to be_a_kind_of(String)
+      end
+
+      def mock_http
+        response = double(body: "")
+        http = double(request: response)
+      end
+
+      def mock_net
+        get_request = double
+
+        instance_double(NetHTTPWrapper, get: get_request)
       end
     end
 

@@ -8,6 +8,7 @@ module GoVerbal
         it "yields an object that can be turned into a Nokogiri::HTML doc" do
           url = ROOT_URL
           wrapper = NetHTTPWrapper.new
+
           nokogiri_creation_block = lambda do |url|
             uri = URI(url)
             wrapper.start(uri.host, uri.port, :use_ssl => uri.scheme == 'https') do |http|

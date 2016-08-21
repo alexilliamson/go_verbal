@@ -21,3 +21,6 @@ I had to narrow the scope of my first feature test, so I put "url scraping" to t
 
 #Update 2016_08_18
 Once again, I have reached the point where my acceptance test is failing but it's not clear why.  So, once again, I narrow the focus of my acceptance test to the GPOSite.
+
+#Update 2016_08_20
+Victory was had with the first acceptance test passing and the ensuing refactoring.  Now, the "big one" is written; that is, enumerating pages of congressional record text.
