@@ -10,7 +10,7 @@ module GoVerbal
         nav_menu_mapper = described_class.new
 
         extract = nav_menu_mapper.parse(element)
-        expect(extract).to eq("text")
+        expect(extract).to have_attributes(value: "text")
       end
     end
   end

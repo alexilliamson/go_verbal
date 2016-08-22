@@ -24,3 +24,6 @@ Once again, I have reached the point where my acceptance test is failing but it'
 
 #Update 2016_08_20
 Victory was had with the first acceptance test passing and the ensuing refactoring.  Now, the "big one" is written; that is, enumerating pages of congressional record text.
+
+#Update 2016_08_21
+Scaling back again... months before text pages

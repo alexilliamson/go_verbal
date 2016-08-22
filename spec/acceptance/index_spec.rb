@@ -2,19 +2,20 @@ require 'spec_helper'
 require 'go_verbal'
 
 RSpec.describe "an index" do
-  context "built from the root page of the GPOSite" do
+  context "built from the root page of the GPOSite", :vcr do
     it "has every year since 1994" do
-      index = GoVerbal.build_index(root_gpo_site)
+      index = GoVerbal.build_index
+      years = index.years
 
-      expect(index.years).to eq(years_since_1994)
+      expect(years.map(&:value)).to eq(years_since_1994)
     end
   end
 
-  it "enumerates pages of the Congressional Record" do
+  it "enumerates years of the Congressional Record", :vcr  do
     index = GoVerbal.build_index
-    index.text_pages
+    years = index.years
 
-    expect(index.next).to be_a_kind_of(GoVerbal::CongressionalRecordPage)
+    expect(years.next).to have_attributes(:value => "1994")
   end
 
   def root_gpo_site
