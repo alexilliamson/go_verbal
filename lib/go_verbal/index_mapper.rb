@@ -1,50 +1,49 @@
-require_relative 'crawler'
+require_relative 'parser'
 
 module GoVerbal
   class IndexMapper
-    attr_accessor :gpo_site
+    ParsedElement = Struct.new(:value, :url)
 
-    IndexItem = Struct.new(:value)
+    attr_accessor :gpo_site, :parser, :month_css_class
 
     def initialize(site = nil)
+      @parser = Parser.new
       @gpo_site = site
     end
 
     def years
-      year_list = year_elements(gpo_site)
+      gpo_site.go_to_root
+      year_css_class = "level1 browse-level"
 
-      parsed_year_list = parse_year_list(year_list)
+      year_links = gpo_site.menu_links(year_css_class)
+      index_years = map_scraped_links(year_links)
+      index_years = index_years.sort_by {|item| item.value}
 
-      Enumerator.new do |y|
-        parsed_year_list.each do |year|
-          y << year
-        end
+      index_years.each
+    end
+
+    # def months
+    #   Enumerator.new do |y|
+    #     years.each do |year|
+    #       scrape_months(year) do |month|
+    #         y << month
+    #       end
+    #     end
+    #   end
+    # end
+
+    def map_index_months(url)
+      gpo_site.go_to(url)
+      gpo_site.menu_links(month_css_class)
+    end
+
+    def map_scraped_links(menu_links)
+      menu_links.map do  |element|
+        text = parser.clean_text(element)
+        url = parser.extract_url(element)
+
+        ParsedElement.new(text, url)
       end
-    end
-
-    def parse_year_list(year_list)
-      list = year_list.map{ |element| parse(element)}
-      sort_list(list)
-    end
-
-    def sort_list(list)
-      list.sort_by {|item| item.value}
-    end
-
-    def year_elements(gpo_site)
-      root_page = crawler.go_to_root
-      root_page.menu_links
-    end
-
-    def parse(element)
-      element_text = element.text
-      text = element_text.to_s
-
-      IndexItem.new(text.strip)
-    end
-
-    def crawler
-      @crawler ||= Crawler.new(gpo_site)
     end
   end
 end

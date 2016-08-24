@@ -5,12 +5,12 @@ module GoVerbal
     describe "#class_selector_string" do
       css_class = "level1 browse-level"
       context "given :css_class => #{css_class}" do
-        it "sends css message to its content with div.#{css_class}" do
+        it "= div.#{css_class}/a" do
           html = described_class.new(nil)
 
           selector = html.class_selector_string(:div, css_class)
 
-          expect(selector).to eq("div[@class='level1 browse-level']")
+          expect(selector).to eq("div[@class='level1 browse-level']/a")
         end
       end
     end

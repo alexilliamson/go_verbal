@@ -18,12 +18,15 @@ module GoVerbal
       set_current_page(root_page)
     end
 
-    def menu_links
-      current_page.menu(menu_css_classes)
+    def menu_links(css_class)
+      current_page.menu(css_class)
     end
 
     def browser
       Browser
+    end
+
+    def go_to(item)
     end
 
     private

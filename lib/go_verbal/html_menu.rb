@@ -7,15 +7,8 @@ module GoVerbal
       @content = NokogiriHTMLDocWrapper.new(content)
     end
 
-    def menu(div_classes)
-      menu_links = []
-
-      div_classes.each do |div_class|
-        div_matches = div(div_class)
-        menu_links.concat(div_matches)
-      end
-
-      menu_links
+    def menu(css_class)
+      div(css_class)
     end
 
     def div(css_class)
@@ -33,7 +26,7 @@ module GoVerbal
       selector_string = selector.to_s
       class_string = css_class.to_s
 
-      selector_string + "[@class='" + class_string + "']"
+      selector_string + "[@class='" + class_string + "']/a"
     end
   end
 end
