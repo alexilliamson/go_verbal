@@ -11,23 +11,23 @@ RSpec.describe "an index" do
     end
   end
 
-  it "enumerates years of the Congressional Record", :vcr  do
+  it "enumerates sorted years of the Congressional Record", :vcr  do
     index = GoVerbal.build_index
     years = index.years
 
     expect(years.next).to have_attributes(:value => "1994")
   end
 
-  skip "enumerates months of the Congressional Record", :vcr  do
-    index = GoVerbal.build_index
-    months = index.months
+  # it "enumerates months of the Congressional Record", :vcr  do
+  #   index = GoVerbal.build_index
+  #   months = index.months
 
-    expect(months.next).to have_attributes(:value => "January")
-  end
+  #   expect(months.next).to have_attributes(:value => "January")
+  # end
 
   def root_gpo_site
     VCR.use_cassette("root_page") do
-      GoVerbal::GPOSite.new do |site|
+      GoVerbal::GPOSiteBrowser.new do |site|
         site.go_to_root
       end
     end

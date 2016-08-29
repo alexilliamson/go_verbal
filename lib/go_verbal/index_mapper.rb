@@ -4,7 +4,8 @@ module GoVerbal
   class IndexMapper
     ParsedElement = Struct.new(:value, :url)
 
-    attr_accessor :gpo_site, :parser, :month_css_class
+    attr_accessor :gpo_site, :parser
+    attr_writer :years
 
     def initialize(site = nil)
       @parser = Parser.new
@@ -12,6 +13,10 @@ module GoVerbal
     end
 
     def years
+      @years ||= load_menu_years
+    end
+
+    def load_menu_years
       gpo_site.go_to_root
       year_css_class = "level1 browse-level"
 
@@ -22,19 +27,39 @@ module GoVerbal
       index_years.each
     end
 
-    # def months
-    #   Enumerator.new do |y|
-    #     years.each do |year|
-    #       scrape_months(year) do |month|
-    #         y << month
-    #       end
-    #     end
+    def months
+      @months ||= to_enum(:load_months)
+    end
+
+    def load_months
+      month_css_class = "level2 browse-level"
+      month_colllection = []
+      years.each do |year|
+        gpo_site.go_to(year.url)
+        month_links = gpo_site.menu_links(month_css_class)
+        map_scraped_months(month_links) do |month|
+          yield month
+        end
+      end
+
+      month_colllection
+    end
+
+    # def map_index_months(year)
+    #   # year_css_class = "level1 browse-level"
+
+    #   month_links = gpo_site.menu_links(month_css_class) do |month_link|
+    #     yield map_scraped_link(month_link)
     #   end
     # end
 
-    def map_index_months(url)
-      gpo_site.go_to(url)
-      gpo_site.menu_links(month_css_class)
+    def map_scraped_months(months)
+      months.each do |element|
+        text = parser.clean_text(element)
+        url = parser.extract_url(element)
+
+        yield ParsedElement.new(text, url)
+      end
     end
 
     def map_scraped_links(menu_links)
@@ -42,6 +67,7 @@ module GoVerbal
         text = parser.clean_text(element)
         url = parser.extract_url(element)
 
+        yield menu_links if block_given?
         ParsedElement.new(text, url)
       end
     end
