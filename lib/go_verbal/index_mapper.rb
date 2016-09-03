@@ -1,75 +1,59 @@
 require_relative 'parser'
+require_relative 'scraper'
 
 module GoVerbal
   class IndexMapper
     ParsedElement = Struct.new(:value, :url)
 
-    attr_accessor :gpo_site, :parser
-    attr_writer :years
+    attr_accessor :parser, :scraper
+    attr_writer :years, :months
 
-    def initialize(site = nil)
+    def initialize(scraper)
       @parser = Parser.new
-      @gpo_site = site
+      @scraper = scraper
+    end
+
+    def css_classes
+      scraper.css_class_names
     end
 
     def years
-      @years ||= load_menu_years
-    end
-
-    def load_menu_years
-      gpo_site.go_to_root
-      year_css_class = "level1 browse-level"
-
-      year_links = gpo_site.menu_links(year_css_class)
-      index_years = map_scraped_links(year_links)
-      index_years = index_years.sort_by {|item| item.value}
-
-      index_years.each
+      @years ||= load_years {}
+      @years.each
     end
 
     def months
       @months ||= to_enum(:load_months)
     end
 
+    def dates
+      @dates ||= to_enum(:load_dates)
+    end
+
+    def load_years
+      menu_links = scraper.collect_year_links
+
+      index_years = menu_links.map{ |y| parse_element(y)}
+      index_years.sort_by {|element| element.value}
+    end
+
     def load_months
-      month_css_class = "level2 browse-level"
-      month_colllection = []
-      years.each do |year|
-        gpo_site.go_to(year.url)
-        month_links = gpo_site.menu_links(month_css_class)
-        map_scraped_months(month_links) do |month|
-          yield month
-        end
-      end
-
-      month_colllection
-    end
-
-    # def map_index_months(year)
-    #   # year_css_class = "level1 browse-level"
-
-    #   month_links = gpo_site.menu_links(month_css_class) do |month_link|
-    #     yield map_scraped_link(month_link)
-    #   end
-    # end
-
-    def map_scraped_months(months)
-      months.each do |element|
-        text = parser.clean_text(element)
-        url = parser.extract_url(element)
-
-        yield ParsedElement.new(text, url)
+      scraper.find_months(self) do |month|
+        yield parse_element(month)
       end
     end
 
-    def map_scraped_links(menu_links)
-      menu_links.map do  |element|
-        text = parser.clean_text(element)
-        url = parser.extract_url(element)
-
-        yield menu_links if block_given?
-        ParsedElement.new(text, url)
+    def load_dates
+      scraper.find_dates(self) do |month|
+        yield parse_element(month)
       end
+    end
+
+    def parse_element(element)
+      text = parser.clean_text(element)
+      url = parser.extract_url(element)
+
+      ParsedElement.new(text, url)
     end
   end
 end

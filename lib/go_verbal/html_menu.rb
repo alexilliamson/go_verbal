@@ -7,10 +7,6 @@ module GoVerbal
       @content = NokogiriHTMLDocWrapper.new(content)
     end
 
-    def menu(css_class)
-      div(css_class)
-    end
-
     def div(css_class)
       matcher = class_selector_string(:div, css_class)
 

@@ -1,5 +1,5 @@
 require 'spec_helper'
-
+require 'go_verbal/html_menu'
 module GoVerbal
   RSpec.describe HTMLMenu do
     describe "#class_selector_string" do
