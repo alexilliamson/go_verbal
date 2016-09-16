@@ -93,4 +93,29 @@ RSpec.describe "an enumerated item from the index" do
       end
     end
   end
+
+  describe "a section"do
+    describe "#value" do
+      it "is one of the four sections of text" do
+        VCR.use_cassette("urls", :allow_unused_http_interactions => false) do
+          index = GoVerbal.build_index
+
+          sections = index.sections
+          section = sections.next
+          section_value = section.value
+
+          section_match = section_names.detect do |sec|
+            sec =~ section_value
+          end
+
+          expect(section_names).to match(section_value)
+        end
+      end
+
+      def section_names
+        GoVerbal::SECTIONNAMES.compact.map {|name| /#{name.downcase}/i}
+      end
+
+    end
+  end
 end

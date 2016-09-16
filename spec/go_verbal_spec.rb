@@ -26,6 +26,11 @@ module GoVerbal
         css_classes = GoVerbal.css_classes
         expect(css_classes).to include(:date)
       end
+
+      it "has section" do
+        css_classes = GoVerbal.css_classes
+        expect(css_classes).to include(:section)
+      end
     end
   end
 end

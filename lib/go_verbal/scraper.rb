@@ -7,54 +7,36 @@ module GoVerbal
       @css_class_names = css_class_names
     end
 
-    def find_months(index_mapper)
-      years = index_mapper.years
-      years.each do |year|
-        url = year.url
-        collect_links(link_type: :month, url: url) do |element|
-          yield element
-        end
-      end
+    def root_index_item
+      OpenStruct.new(:url => ROOT_URL, child_type: :year)
     end
 
     def find_dates(index_mapper)
       months = index_mapper.months
       months.each do |month|
-        url = month.url
-        collect_links(link_type: :date, url: url) do |element|
+        collect_links(month) do |element|
           yield element
         end
       end
     end
 
     def collect_year_links
-      site.go_to_root
-
-      menu_links(site, :year)
+      to_enum(:collect_child_links, root_index_item)
     end
 
-    def collect_month_links(url)
-      collect_links(link_type: :month, url: url) {|link| yield link}
-    end
-
-    def collect_date_links(url)
-      collect_links(link_type: :date, url: url) {|link| yield link}
-    end
-
-    def collect_links(link_type:, url:)
+    def collect_child_links(index_item)
+      url = index_item.url
+      link_type = index_item.child_type
       site.go_to(url)
-      menu_links(site, link_type).each do |link|
-        yield link
+
+      css_class = css_class_names[link_type]#{}"level1 browse-level"
+      links = site.menu_links(css_class)
+
+      if links.empty?
+        raise "#{site} #{url} HAS NO MENU_LINKS FOR CSS CLASS[#{css_class_names[link_type]}]"
+      else
+        links.each  {|link| yield link}
       end
-    end
-
-    def date_css_class=(css_class)
-      css_class_names[:date] = css_class
-    end
-
-    def menu_links(gpo_site, level_description)
-      css_class = css_class_names[level_description]#{}"level1 browse-level"
-      gpo_site.menu_links(css_class)
     end
   end
 end

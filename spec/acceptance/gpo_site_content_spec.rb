@@ -29,12 +29,10 @@ module GoVerbal
 
         expect(1..12).to cover(links.size)
       end
-
-  end
+    end
 
     def valid_year_url
       "https://www.gpo.gov/fdsys/browse/collection.action?collectionCode=CREC&browsePath=2016&isCollapsed=false&leafLevelBrowse=false&ycord=143"
     end
-
   end
 end

@@ -10,9 +10,8 @@ module GoVerbal
 
         url = "https://www.google.com/images"
 
-        expect(net_http_library).
-        to receive(:start).
-        with("www.google.com",
+        expect(net_http_library).to receive(:start).with(
+          "www.google.com",
           443,
           :use_ssl => true
           )
@@ -27,7 +26,6 @@ module GoVerbal
         allow(net).to receive(:start).and_yield(http)
 
         internet = Internet.new(net)
-
 
         expect(http).to receive(:request)
 
