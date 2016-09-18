@@ -94,6 +94,28 @@ RSpec.describe "an enumerated item from the index" do
     end
   end
 
+  describe "its type" do
+    specify "is :year", :vcr do
+      element = GoVerbal::build_index.years.next
+      expect(element.type).to eq(:year)
+    end
+
+    specify "a month", :vcr do
+      element = GoVerbal::build_index.months.next
+      expect(element.type).to eq(:month)
+    end
+
+    specify "a date", :vcr do
+      element = GoVerbal::build_index.dates.next
+      expect(element.type).to eq(:date)
+    end
+
+    specify "a section", :vcr do
+      element = GoVerbal::build_index.sections.next
+      expect(element.type).to eq(:section)
+    end
+  end
+
   describe "a section"do
     describe "#value" do
       it "is one of the four sections of text" do
@@ -108,7 +130,19 @@ RSpec.describe "an enumerated item from the index" do
             sec =~ section_value
           end
 
-          expect(section_names).to match(section_value)
+          expect(section_match).to be_truthy
+        end
+
+      end
+
+      it "has a url from the GPOSite domain" do
+        VCR.use_cassette("urls", :allow_unused_http_interactions => false) do
+          index = GoVerbal.build_index
+          sections = index.sections
+          section = sections.next
+
+          puts(section.url)
+          expect(section.url).to start_with("https://www.gpo.gov/fdsys/browse/")
         end
       end
 
