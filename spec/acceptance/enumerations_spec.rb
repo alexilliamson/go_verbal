@@ -141,7 +141,6 @@ RSpec.describe "an enumerated item from the index" do
           sections = index.sections
           section = sections.next
 
-          puts(section.url)
           expect(section.url).to start_with("https://www.gpo.gov/fdsys/browse/")
         end
       end

@@ -14,6 +14,8 @@ module GoVerbal
       url_source = element.attributes[url_source_attribute]
 
       url = parse_url_source(url_source)
+
+
     end
 
     def parse_url_source(onclick)
@@ -21,7 +23,13 @@ module GoVerbal
 
       url = match['link_a'].to_s
 
+      raise no_match_error(onclick) if url.empty?
+
       PAGE_DOMAIN + url
+    end
+
+    def no_match_error(thing)
+      "NO MATCHING ONCLICK PATTERN; ELEMENT#{thing}"
     end
   end
 end

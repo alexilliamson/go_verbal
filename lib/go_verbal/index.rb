@@ -36,7 +36,9 @@ module GoVerbal
     def enumerate_children(collection)
       Enumerator.new do |y|
         collection.each do |p|
-          mapper.child_elements(p) do |child|
+          subsections = mapper.index_subsections(p)
+
+          subsections.each do |child|
             y << child
           end
         end

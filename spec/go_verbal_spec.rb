@@ -4,28 +4,9 @@ module GoVerbal
   RSpec.describe GoVerbal do
     describe ".css_classes" do
       it "has year" do
-        css_classes = GoVerbal.css_classes
-        expect(css_classes).to include(:year)
-      end
-
-      it "has month" do
-        css_classes = GoVerbal.css_classes
-        expect(css_classes).to include(:month)
-      end
-
-      it "has date" do
-        css_classes = GoVerbal.css_classes
-        expect(css_classes).to include(:date)
-      end
-
-      it "has section" do
-        css_classes = GoVerbal.css_classes
-        expect(css_classes).to include(:section)
-      end
-
-      it "has text_page" do
-        css_classes = GoVerbal.css_classes
-        expect(css_classes).to include(:text_page)
+        scrape_mapping = GoVerbal.scrape_mapping
+        css_classes = scrape_mapping.css_classes
+        expect(css_classes).to include(:year, :month, :date, :section, :text_page)
       end
     end
   end

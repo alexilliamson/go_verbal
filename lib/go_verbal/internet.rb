@@ -1,4 +1,3 @@
-require_relative 'html_menu'
 require_relative 'net_http_wrapper'
 require_relative 'nokogiri_html_doc_wrapper'
 

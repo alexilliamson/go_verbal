@@ -4,7 +4,7 @@ module GoVerbal
   ROOT_URL = "https://www.gpo.gov/fdsys/browse/collection.action?collectionCode=CREC"
 
   class GPOSiteBrowser
-    attr_accessor  :current_page_menu
+    attr_accessor  :current_page
     attr_writer :internet
 
     def initialize
@@ -15,20 +15,27 @@ module GoVerbal
       go_to(ROOT_URL)
     end
 
-    def menu_links(css_class)
-      raise "CURRENT PAGE_MENU NOT SET" unless current_page_menu
-      elements = current_page_menu.div(css_class)
+    def go_to(url)
+      page = internet.give_me(url)
+      set_current_page(page)
+    end
+
+    def xpath_query(xpath_query)
+      raise "CURRENT PAGE NOT SET" unless current_page
+
+      elements = current_page.css(xpath_query)
+
       if elements.any?
         return elements
       else
-        raise "NO MENU LINKS {#css_class: #{css_class}}"
+        raise no_xpath_query_error(xpath_query)
       end
     end
 
-    def go_to(url)
-      page = internet.give_me(url)
-      set_current_page_menu(page)
+    def no_xpath_query_error(xpath_query)
+      "NO MENU LINKS {XPATH: #{xpath_query}}"
     end
+
 
     def internet
       @internet ||= Internet.new
@@ -36,8 +43,8 @@ module GoVerbal
 
     private
 
-    def set_current_page_menu(page)
-      @current_page_menu = HTMLMenu.new(page)
+    def set_current_page(page)
+      @current_page = NokogiriHTMLDocWrapper.new(page)
     end
   end
 end

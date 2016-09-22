@@ -7,23 +7,33 @@ module GoVerbal
   SECTIONNAMES = ["Daily Digest", "Extensions of Remarks", "House","Senate"]
 
   def self.build_index(gpo_site_browser = GPOSiteBrowser.new)
-    crawler = Scraper.new(browser: gpo_site_browser, css_class_names: css_classes)
-    mapper = IndexMapper.new(crawler, ordered_index_types)
+    scraper = Scraper.new(browser: gpo_site_browser, mapping: scrape_mapping)
+    mapper = IndexMapper.new(scraper: scraper, mapping: scrape_mapping)
     Index.new(mapper)
   end
 
   def self.ordered_index_types
-    css_classes.keys
+    scrape_mapping.css_classes.keys
   end
 
-  def self.css_classes
+  def self.scrape_mapping
     ScrapeMapping.new(
-      year: "level1 browse-level",
-      month: "level2 browse-level",
-      date: "level3 browse-level",
-      section: "level4 browse-leaf-level ",
-      text_page: "browse-download-links"
-    ).
-    mapping
+      year: [
+        div: { class: "level1 browse-level"}
+        ],
+      month: [
+        div: {class: "level2 browse-level"}
+        ],
+      date: [
+        div: {class:  "level3 browse-level" }
+        ],
+      section: [
+        div: {class:  "level4 browse-leaf-level " }
+        ],
+      text_page: [
+       { table: {class:  "browse-node-table" }} ,
+       { td: {class:  "browse-download-links", :char_before => "/"  }}
+      ]
+    )
   end
 end

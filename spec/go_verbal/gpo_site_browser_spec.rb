@@ -22,28 +22,17 @@ module GoVerbal
         site = described_class.new
         site.internet = internet
 
-        expect{ site.go_to("url")}.to change{site.current_page_menu}
+        expect{ site.go_to("url")}.to change{site.current_page}
       end
     end
 
-    describe "#menu_links" do
+    describe "#xpath_query" do
       context "when current page is not set" do
         it "fails with message" do
           site = GPOSiteBrowser.new
           invalid_class = "dodo bird"
 
-          expect{site.menu_links(invalid_class)}.to raise_error("CURRENT PAGE_MENU NOT SET")
-        end
-      end
-
-      context "when current page is set" do
-        it "fails with message" do
-          site = GPOSiteBrowser.new
-          site.current_page_menu = double("Menu", div: [])
-
-          invalid_class = "dodo bird"
-          error_expectation = "NO MENU LINKS {#css_class: #{invalid_class}}"
-          expect{site.menu_links(invalid_class)}.to raise_error(error_expectation)
+          expect{site.xpath_query(invalid_class)}.to raise_error("CURRENT PAGE NOT SET")
         end
       end
     end
