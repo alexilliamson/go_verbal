@@ -4,7 +4,10 @@ require 'go_verbal/index_mapper'
 require 'go_verbal/scrape_mapping'
 
 module GoVerbal
+  Dotenv.load
+  DB = Sequel.connect(ENV.fetch("DATABASE_URL"))
   SECTIONNAMES = ["Daily Digest", "Extensions of Remarks", "House","Senate"]
+
 
   def self.build_index(gpo_site_browser = GPOSiteBrowser.new)
     scraper = Scraper.new(browser: gpo_site_browser, mapping: scrape_mapping)

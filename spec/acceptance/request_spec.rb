@@ -17,15 +17,10 @@ RSpec.describe "making https requests" do
 
   context "made during year enumeration" do
     it "should be a single request", :vcr do
-      year_enumerator = make_year_enumerator
-      year_enumerator.next
-      year_enumerator.next
-      expect(WebMock).to  have_requested(:get, GoVerbal::ROOT_URL).once
-    end
-
-    def make_year_enumerator
+      WebMock.reset!
       index = GoVerbal.build_index
-      index.years
+      year_enumerator = index.years
+      expect(WebMock).to  have_requested(:get, GoVerbal::ROOT_URL).once
     end
   end
 
