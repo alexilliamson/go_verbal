@@ -19,7 +19,7 @@ module GoVerbal
     end
 
     def parse_url_source(onclick)
-      match = ONLCLICK_MATCHER.match(onclick) || {}
+      match = ONLCLICK_MATCHER.match(onclick) || {  }
 
       url = match['link_a'].to_s
 
@@ -29,7 +29,7 @@ module GoVerbal
     end
 
     def no_match_error(thing)
-      "NO MATCHING ONCLICK PATTERN; ELEMENT#{thing}"
+      "NO MATCHING ONCLICK PATTERN; ELEMENT#{ thing }"
     end
   end
 end

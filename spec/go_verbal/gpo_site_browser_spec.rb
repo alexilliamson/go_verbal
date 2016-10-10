@@ -22,7 +22,7 @@ module GoVerbal
         site = described_class.new
         site.internet = internet
 
-        expect{ site.go_to("url")}.to change{site.current_page}
+        expect{  site.go_to("url") }.to change{ site.current_page }
       end
     end
 
@@ -32,7 +32,7 @@ module GoVerbal
           site = GPOSiteBrowser.new
           invalid_class = "dodo bird"
 
-          expect{site.xpath_query(invalid_class)}.to raise_error("CURRENT PAGE NOT SET")
+          expect{ site.xpath_query(invalid_class) }.to raise_error("CURRENT PAGE NOT SET")
         end
       end
     end

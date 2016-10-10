@@ -14,7 +14,7 @@ module GoVerbal
 
     def load_years
       index_years = index_subsections(root_menu_item)
-      index_years.sort_by {|element| element.value}
+      index_years.sort_by { |element| element.value }
     end
 
     def root_menu_item
@@ -25,7 +25,7 @@ module GoVerbal
       child_links = submenu_links(item)
       type = item.child_type
 
-      child_links.map { |child_link| map_element(child_link, type) }
+      child_links.map {  |child_link| map_element(child_link, type)  }
     end
 
     def submenu_links(item)
@@ -36,17 +36,24 @@ module GoVerbal
     end
 
     def map_element(element, type)
-      child_type = ordered_index_types.fetch(type)
-      text = map_text(element, type)
       url = map_url(element, type)
-      # parsed_element.type = type
+      text = map_text(element, type)
 
-      ParsedElement.new(
-        value: text,
-        url: url,
-        type: type,
-        child_type: child_type
-        )
+      if type == :text_page
+        TextPage.new(
+          value: text,
+          url: url,
+          type: type
+          )
+      else
+        child_type = ordered_index_types.fetch(type)
+        ParsedElement.new(
+          value: text,
+          url: url,
+          type: type,
+          child_type: child_type
+          )
+      end
     end
 
     def map_url(element, type)
@@ -66,6 +73,8 @@ module GoVerbal
     def get_text_bearing_node(element, type)
       if type == :section
         element.parent.children[4]
+      elsif type == :text_page
+        element.parent.parent.previous_element.children[1]
       else
         element
       end

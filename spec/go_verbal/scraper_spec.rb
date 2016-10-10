@@ -7,7 +7,7 @@ module GoVerbal
         mapping_double = double("Mapping", css_classes: {})
         menu = described_class.new(browser: nil, mapping: mapping_double)
         tag = :div
-        value = {:class => "divy"}
+        value = { :class => "divy" }
 
         params = [tag => value]
 
@@ -20,9 +20,9 @@ module GoVerbal
         mapping_double = double("Mapping", css_classes: {})
         menu = described_class.new(browser: nil, mapping: mapping_double)
         tag = :div
-        value = {:class => "divy"}
+        value = { :class => "divy" }
 
-        params = [{tag => value}, {tag => value}]
+        params = [{ tag => value }, { tag => value }]
 
         query = menu.make_css_query(params)
         expectation = "div" + "[@class='" + "divy" + "']" +"/div" + "[@class='" + "divy" + "']" + "/a"
@@ -33,9 +33,9 @@ module GoVerbal
         mapping_double = double("Mapping", css_classes: {})
         menu = described_class.new(browser: nil, mapping: mapping_double)
         tag = :div
-        value = {:class => "divy"}
+        value = { :class => "divy" }
 
-        params = [{tag => value}, :symbol_test]
+        params = [{ tag => value }, :symbol_test]
 
         query = menu.make_css_query(params)
         expectation = "div" + "[@class='" + "divy" + "']" +"/symbol_test" + "/a"
@@ -46,9 +46,9 @@ module GoVerbal
         mapping_double = double("Mapping", css_classes: {})
         menu = described_class.new(browser: nil, mapping: mapping_double)
         tag = :div
-        value = {:char_before => '/'}
+        value = { :char_before => '/' }
 
-        params = [{tag => value}]
+        params = [{ tag => value }]
 
         query = menu.make_css_query(params)
         expectation = "/div/a"

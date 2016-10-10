@@ -85,11 +85,11 @@ RSpec.describe "an enumerated item from the index" do
       end
 
       def weekdays
-        Date::DAYNAMES.map {|name| /#{name.downcase}/i}
+        Date::DAYNAMES.map { |name| /#{ name.downcase }/i }
       end
 
       def month_names
-        Date::MONTHNAMES.compact.map {|name| /#{name.downcase}/i}
+        Date::MONTHNAMES.compact.map { |name| /#{ name.downcase }/i }
       end
     end
   end
@@ -146,7 +146,7 @@ RSpec.describe "an enumerated item from the index" do
       end
 
       def section_names
-        GoVerbal::SECTIONNAMES.compact.map {|name| /#{name.downcase}/i}
+        GoVerbal::SECTIONNAMES.compact.map { |name| /#{ name.downcase }/i }
       end
 
     end

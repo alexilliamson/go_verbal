@@ -19,7 +19,7 @@ module GoVerbal
             end
           end
 
-          expect{ nokogiri_creation_block.call(url) }.to_not raise_error
+          expect{  nokogiri_creation_block.call(url) }.to_not raise_error
         end
       end
     end

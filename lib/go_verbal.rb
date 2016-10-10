@@ -2,6 +2,7 @@ require 'go_verbal/gpo_site_browser'
 require 'go_verbal/index'
 require 'go_verbal/index_mapper'
 require 'go_verbal/scrape_mapping'
+require 'go_verbal/text_page'
 
 module GoVerbal
   Dotenv.load
@@ -22,20 +23,20 @@ module GoVerbal
   def self.scrape_mapping
     ScrapeMapping.new(
       year: [
-        div: { class: "level1 browse-level"}
+        div: {  class: "level1 browse-level" }
         ],
       month: [
-        div: {class: "level2 browse-level"}
+        div: { class: "level2 browse-level" }
         ],
       date: [
-        div: {class:  "level3 browse-level" }
+        div: { class:  "level3 browse-level"  }
         ],
       section: [
-        div: {class:  "level4 browse-leaf-level " }
+        div: { class:  "level4 browse-leaf-level "  }
         ],
       text_page: [
-       { table: {class:  "browse-node-table" }} ,
-       { td: {class:  "browse-download-links", :char_before => "/"  }}
+       {  table: { class:  "browse-node-table"  } } ,
+       {  td: { class:  "browse-download-links", :char_before => "/"   } }
       ]
     )
   end

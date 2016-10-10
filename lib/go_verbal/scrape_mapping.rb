@@ -9,7 +9,7 @@ module GoVerbal
     end
 
     def load_types(index_types)
-      types_hash = {}
+      types_hash = {  }
 
       index_types.each_index do |i|
         key = index_types[i]

@@ -2,7 +2,7 @@ module GoVerbal
   class Scraper
     attr_accessor :site, :css_class_names
 
-    def initialize(browser:, mapping: {})
+    def initialize(browser:, mapping: {  })
       @site = browser
       @css_class_names = mapping.css_classes
     end
@@ -46,7 +46,7 @@ module GoVerbal
 
     def modify_attr_string(attr_string, key, value)
       if key == :class
-        attr_string + "[@#{key}='#{value}" + "']"
+        attr_string + "[@#{ key }='#{ value }" + "']"
       elsif key == :char_before
         value << attr_string
       end

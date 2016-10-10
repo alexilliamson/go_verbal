@@ -6,7 +6,7 @@ module GoVerbal
     describe "#clean_text" do
       it "extracts texts and strips whitespace" do
         element = mock_element
-        allow(element).to receive(:text) { "\t\t\ntext\t\t\n"}
+        allow(element).to receive(:text) {  "\t\t\ntext\t\t\n" }
         parser = described_class.new
 
         extract = parser.clean_text(element)
@@ -20,7 +20,7 @@ module GoVerbal
           element = mock_element
           parser = described_class.new
 
-          expect{parser.extract_url(element)}.to raise_error("NO MATCHING ONCLICK PATTERN; ELEMENT#{element.attributes['onclick']}")
+          expect{ parser.extract_url(element) }.to raise_error("NO MATCHING ONCLICK PATTERN; ELEMENT#{ element.attributes['onclick'] }")
         end
       end
 
@@ -28,8 +28,8 @@ module GoVerbal
         it "extracts url from onclick" do
           element = mock_element
 
-          allow(element).to receive(:attributes) { {"onclick" => "goWithVars('/fdsys/browse/collection.action?collectionCode=CREC&browsePath=2016&isCollapsed=false&leafLevelBrowse=false',''); return false;"
-          }}
+          allow(element).to receive(:attributes) {  { "onclick" => "goWithVars('/fdsys/browse/collection.action?collectionCode=CREC&browsePath=2016&isCollapsed=false&leafLevelBrowse=false',''); return false;"
+          } }
           parser = described_class.new
 
           extract = parser.extract_url(element)

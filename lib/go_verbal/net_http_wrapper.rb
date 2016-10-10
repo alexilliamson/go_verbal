@@ -4,7 +4,7 @@ module GoVerbal
       @library = Net::HTTP
     end
 
-    def start(host, port, options={})
+    def start(host, port, options={  })
       @library.start(host, port, options) do |yielded_thing|
         yield yielded_thing
       end

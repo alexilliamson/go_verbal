@@ -33,7 +33,7 @@ module GoVerbal
     end
 
     def no_xpath_query_error(xpath_query)
-      "NO MENU LINKS {XPATH: #{xpath_query}}"
+      "NO MENU LINKS { XPATH: #{ xpath_query } }"
     end
 
 
