@@ -1,18 +1,18 @@
 module GoVerbal
   class Scraper
-    attr_accessor :site, :css_class_names
+    attr_accessor :browser, :css_class_names
 
     def initialize(browser:, mapping: {  })
-      @site = browser
+      @browser = browser
       @css_class_names = mapping.css_classes
     end
 
     def collect_links(url:, link_type:)
-      site.go_to(url)
+      browser.go_to(url)
       css_params = css_class_names.fetch(link_type)
       query = make_css_query(css_params)
 
-      links = site.xpath_query(query)
+      links = browser.xpath_query(query)
     end
 
     def make_css_query(params)
@@ -50,6 +50,16 @@ module GoVerbal
       elsif key == :char_before
         value << attr_string
       end
+    end
+
+    def scrape_content(url)
+      browser.go_to(url)
+      browser.current_page
+
+      query = "body"
+      results = browser.xpath_query(query)
+        .first
+        .to_s
     end
   end
 end

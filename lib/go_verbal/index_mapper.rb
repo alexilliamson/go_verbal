@@ -32,7 +32,14 @@ module GoVerbal
       child_type = item.child_type
       url = item.url
 
-      child_links = scraper.collect_links(url: url, link_type: child_type)
+      child_links = scraper.collect_links(url: url, link_type: child_type).to_a
+      if child_type == :text_page
+        # child_links = child_links.delete_if {|l| l.attributes['href'] =~ /.pdf/}
+        child_links = child_links.keep_if {|l| l.attributes['href'].to_s =~ /.htm/}
+        raise "WTF #{item.url}" if child_links.empty?
+      end
+
+      child_links
     end
 
     def map_element(element, type)
@@ -40,10 +47,11 @@ module GoVerbal
       text = map_text(element, type)
 
       if type == :text_page
-        TextPage.new(
+        HTMLTextPage.new(
           value: text,
           url: url,
-          type: type
+          type: type,
+          scraper: scraper
           )
       else
         child_type = ordered_index_types.fetch(type)

@@ -1,5 +1,5 @@
 require 'spec_helper'
-# require 'go_verbal/nav_menu_mapper'
+require 'go_verbal'
 
 module GoVerbal
   RSpec.describe NetHTTPWrapper do

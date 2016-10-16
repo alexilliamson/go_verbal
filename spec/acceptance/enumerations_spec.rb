@@ -1,20 +1,26 @@
 require 'spec_helper'
 require 'go_verbal'
 
-RSpec.describe "an enumerated item from the index" do
-  describe "a year", :vcr do
-    it "has an url from the GPO domain" do
-      index = GoVerbal.build_index
-      years = index.years
-      year = years.next
-      expect(year.url).to start_with("https://www.gpo.gov/fdsys/browse/")
+RSpec.describe "Index Enumerations" do
+  describe "a year" do
+    subject do
+      VCR.use_cassette("drill_through_content") do
+        index = GoVerbal.build_index
+        years = index.years
+        year = years.next
+      end
+    end
+
+    it "has an url starting with https://www.gpo.gov/fdsys/browse/" do
+      expect(subject.url).to start_with("https://www.gpo.gov/fdsys/browse/")
     end
 
     it "has a year between 1994 and current year" do
-      index = GoVerbal.build_index
-      years = index.years
-      year = years.next
-      expect(years_since_1994).to include(year.value)
+      expect(years_since_1994).to include(subject.value)
+    end
+
+    it "has type :year" do
+      expect(subject.type).to eq(:year)
     end
 
     def years_since_1994
@@ -28,127 +34,102 @@ RSpec.describe "an enumerated item from the index" do
     end
   end
 
-  describe "a month", :vcr do
+  describe "a month" do
+    subject do
+      VCR.use_cassette("drill_through_content") do
+        index = GoVerbal.build_index
+        months = index.months
+        months.next
+      end
+    end
+
     it "has a value from the GPOSite domain" do
-      index = GoVerbal.build_index
-      months = index.months
-      month = months.next
-      expect(month.value).to eq("January")
+      expect(subject.value).to eq("January")
     end
 
     it "has a url from the GPOSite domain" do
-      index = GoVerbal.build_index
-      months = index.months
-      month = months.next
-      expect(month.url).to start_with("https://www.gpo.gov/fdsys/browse/")
+      expect(subject.url).to start_with("https://www.gpo.gov/fdsys/browse/")
+    end
+
+    it "has type :month" do
+      expect(subject.type).to eq(:month)
     end
   end
 
-  describe "a day", :vcr do
-    describe "#url" do
-      it "has a url from the GPOSite domain" do
+  describe "a day" do
+    subject do
+      VCR.use_cassette("drill_through_content") do
         index = GoVerbal.build_index
-        dates = index.dates
-        date = dates.next
-
-        expect(date.url).to start_with("https://www.gpo.gov/fdsys/browse/")
+          .dates
+          .next
       end
     end
 
-    describe "#value" do
-      it "contains a weekday" do
-        index = GoVerbal.build_index
+    it "has a url from the GPOSite domain" do
+      expect(subject.url).to start_with("https://www.gpo.gov/fdsys/browse/")
+    end
 
-        dates = index.dates
-        date = dates.next
-        date_value = date.value
+    it "contains a weekday" do
+      date_value = subject.value
+      weekday_match = weekdays.detect { |wkd| wkd =~ date_value }
 
-        weekday_match = weekdays.detect do |wkd|
-          wkd =~ date_value
-        end
+      expect(weekday_match).to be_truthy
+    end
 
-        expect(weekday_match).to be_truthy
+    it "contains a month" do
+      date_value = subject.value
+
+      month_match = month_names.detect do |month|
+        month =~ date_value
       end
 
-      it "contains a month" do
-        index = GoVerbal.build_index
+      expect(month_match).to be_truthy
+    end
 
-        dates = index.dates
-        date = dates.next
-        date_value = date.value
+    it "has type :date" do
+      expect(subject.type).to eq(:date)
+    end
 
-        month_match = month_names.detect do |month|
-          month =~ date_value
-        end
+    def weekdays
+      Date::DAYNAMES.map { |name| /#{ name.downcase }/i }
+    end
 
-        expect(month_match).to be_truthy
-      end
-
-      def weekdays
-        Date::DAYNAMES.map { |name| /#{ name.downcase }/i }
-      end
-
-      def month_names
-        Date::MONTHNAMES.compact.map { |name| /#{ name.downcase }/i }
-      end
+    def month_names
+      Date::MONTHNAMES.compact.map { |name| /#{ name.downcase }/i }
     end
   end
 
-  describe "its type" do
-    specify "is :year", :vcr do
-      element = GoVerbal::build_index.years.next
-      expect(element.type).to eq(:year)
+  describe "a section" do
+    subject do
+      VCR.use_cassette("drill_through_content") do
+        index = GoVerbal.build_index
+          .sections
+          .next
+      end
     end
 
-    specify "a month", :vcr do
-      element = GoVerbal::build_index.months.next
-      expect(element.type).to eq(:month)
-    end
-
-    specify "a date", :vcr do
-      element = GoVerbal::build_index.dates.next
-      expect(element.type).to eq(:date)
-    end
-
-    specify "a section", :vcr do
-      element = GoVerbal::build_index.sections.next
-      expect(element.type).to eq(:section)
-    end
-  end
-
-  describe "a section"do
     describe "#value" do
       it "is one of the four sections of text" do
-        VCR.use_cassette("urls", :allow_unused_http_interactions => false) do
-          index = GoVerbal.build_index
+        section_value = subject.value
 
-          sections = index.sections
-          section = sections.next
-          section_value = section.value
-
-          section_match = section_names.detect do |sec|
-            sec =~ section_value
-          end
-
-          expect(section_match).to be_truthy
+        section_match = section_names.detect do |sec|
+          sec =~ section_value
         end
 
+        expect(section_match).to be_truthy
       end
+    end
 
-      it "has a url from the GPOSite domain" do
-        VCR.use_cassette("urls", :allow_unused_http_interactions => false) do
-          index = GoVerbal.build_index
-          sections = index.sections
-          section = sections.next
+    it "has a url from the GPOSite domain" do
+      expect(subject.url).to start_with("https://www.gpo.gov/fdsys/browse/")
+    end
 
-          expect(section.url).to start_with("https://www.gpo.gov/fdsys/browse/")
-        end
-      end
+    specify "has section type" do
+      expect(subject.type).to eq(:section)
+    end
 
-      def section_names
-        GoVerbal::SECTIONNAMES.compact.map { |name| /#{ name.downcase }/i }
-      end
-
+    def section_names
+      GoVerbal::SECTIONNAMES.compact.map { |name| /#{ name.downcase }/i }
     end
   end
 end
