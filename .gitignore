@@ -3,3 +3,5 @@ goverbal.sublime-workspace
 Gemfile.lock
 *.DS_Store
 spec/cassettes/*
+spec/test_files/*
+text_files/*

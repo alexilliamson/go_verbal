@@ -25,7 +25,16 @@ module GoVerbal
       child_links = submenu_links(item)
       type = item.child_type
 
-      child_links.map {  |child_link| map_element(child_link, type)  }
+      index_location = get_index_location(item)
+
+      child_links.map do |child_link|
+
+        element = map_element(child_link, type)
+
+        element.index_location = index_location
+
+        element
+      end
     end
 
     def submenu_links(item)
@@ -50,7 +59,6 @@ module GoVerbal
         HTMLTextPage.new(
           value: text,
           url: url,
-          type: type,
           scraper: scraper
           )
       else
@@ -86,6 +94,12 @@ module GoVerbal
       else
         element
       end
+    end
+
+    def get_index_location(item)
+      new_attr = {}
+      new_attr[item.type] = item.value
+      item.child_type == :year ? new_attr : item.index_location.merge(new_attr)
     end
   end
 end

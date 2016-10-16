@@ -3,8 +3,13 @@ module GoVerbal
     attr_accessor :mapper
     attr_writer :years, :months
 
-    def initialize(mapper)
+    def initialize(mapper, options = {})
       @mapper = mapper
+      load_existing(options[:load_existing]) if options[:load_existing]
+    end
+
+    def load_existing(enums)
+      years = enums[:year_enum]
     end
 
     def years
@@ -13,24 +18,48 @@ module GoVerbal
     end
 
     def months
-      collection = years
-
-      enumerate_children(collection)
+      @months ||= enumerate_children(years)
     end
 
     def dates
-      collection = months
-
-      enumerate_children(collection)
+      @dates ||= enumerate_children(months)
     end
 
     def sections
-      collection = dates
-      enumerate_children(collection)
+      @sections ||= enumerate_children(dates)
     end
 
-    def text_pages
-      enumerate_children(sections)
+    def text_pages(options = {})
+      year = options[:year]
+      if year
+        select_year = years.select{|y| y.value == year}
+        @years = select_year
+      end
+      Enumerator.new do |y|
+        years.each do |year|
+          month_collection = mapper.index_subsections(year)
+          month_collection.each do |month|
+            date_collection = mapper.index_subsections(month)
+            date_collection.each do |date|
+              section_collection = mapper.index_subsections(date)
+              section_collection.each do |section|
+                text_page_collection = mapper.index_subsections(section)
+                text_page_collection.each do |page|
+                  y << page
+                end
+              end
+            end
+          end
+        end
+      end
+
+      # text_pages = enumerate_children(sections)
+    end
+
+    def enumerate_year_descendents(year)
+      year.each_month(mapper) do |month|
+        yield month
+      end
     end
 
     def enumerate_children(collection)

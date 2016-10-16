@@ -16,7 +16,20 @@ module GoVerbal
       port = uri.port
       request = get_request(uri)
 
-      make_request(request, host, port)
+      begin
+        retries ||= 0
+        make_request(request, host, port)
+      rescue => e
+        if (retries += 1) < 5
+          sleep_time = 60 * (retries)
+          puts("#{e} occured; waiting sleeping for #{sleep_time} seconds")
+          sleep(sleep_time)
+          retry
+        else
+          puts(Time.now)
+          raise e
+        end
+      end
     end
 
     def get_request(uri)

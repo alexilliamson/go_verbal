@@ -16,17 +16,8 @@ module GoVerbal
     end
 
     def go_to(url)
-
-        page = internet.give_me(url)
-
-
-
-
+      page = internet.give_me(url)
       set_current_page(page)
-    end
-
-    def internet_error(url)
-      "#{url} won't be given"
     end
 
     def xpath_query(xpath_query)

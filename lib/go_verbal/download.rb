@@ -1,24 +1,44 @@
 module GoVerbal
   class Download
-    attr_accessor :target_pages, :destination
+    attr_accessor :target_pages, :destination, :mapper
 
-    def initialize(target_pages:, destination: )
-      @target_pages = target_pages
+    def initialize(mapper:, destination:, options: )
+      @mapper = mapper
       @destination = destination
+
+      # load_inventory(dest)
     end
 
-    def start
+    def start(options= {})
+      target_pages = set_target_pages
+      limit = options[:limit]
+      counter = 0
+
       target_pages.each do |page|
-          attributes = { url: page.url, content: page.content, title: page.title }
+        download_page(page)
 
-          file_name = page.url.to_s.gsub('https://www.gpo.gov/fdsys/pkg/','').gsub(/\/.+$/,'')
-          destination.write(file_name, attributes)
-          yield confirmation
+        counter += 1
+        break if counter == limit
       end
+
     end
 
-    def confirmation
-      "confirmed"
+    def download_page(page)
+      attributes = page.attributes
+      file_name = name_file(page)
+      destination.write(file_name, attributes)
+    end
+
+    def name_file(page)
+      url = page.url.to_s
+      url.gsub(/https\:\/\/www\.gpo\.gov\/fdsys\/pkg\/.*\/html\//,'').gsub(/\..+$/,'')
+    end
+
+    def set_target_pages
+      downloaded_inventory = destination.inventory
+      index = Index.new(mapper, load_existing: downloaded_inventory)
+
+      index.text_pages
     end
   end
 end

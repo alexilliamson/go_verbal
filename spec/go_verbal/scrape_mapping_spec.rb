@@ -1,17 +1,20 @@
 require 'spec_helper'
-require 'go_verbal/scraper'
+require 'go_verbal'
+require 'go_verbal/scrape_mapping'
 module GoVerbal
-  RSpec.describe Scraper do
-    describe "#build_css_query" do
-      it "starts with keys and uses values as html attributes" do
+  RSpec.describe ScrapeMapping do
+    describe "#make_css_query" do
+      subject do
         mapping_double = double("Mapping", css_classes: {})
-        menu = described_class.new(browser: nil, mapping: mapping_double)
+        described_class.new(browser: nil, mapping: mapping_double)
+      end
+
+      it "starts with keys and uses values as html attributes" do
         tag = :div
         value = { :class => "divy" }
-
         params = [tag => value]
 
-        query = menu.make_css_query(params)
+        query = subject.make_css_query(params)
         expectation = "div" + "[@class='" + "divy" + "']/a"
         expect(query).to eq(expectation)
       end
@@ -55,6 +58,10 @@ module GoVerbal
         expect(query).to eq(expectation)
       end
     end
+
+      it "has year" do
+        {:year => "div[@class='level1 browse-level']/a", :month => "div[@class='level2 browse-level']/a", :date => "div[@class='level3 browse-level']/a", :section => "div[@class='level4 browse-leaf-level ']/a", :text_page => "table[@class='browse-node-table']//td[@class='browse-download-links']/a" }
+      end
 
   end
 end

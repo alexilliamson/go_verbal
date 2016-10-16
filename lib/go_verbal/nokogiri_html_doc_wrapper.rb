@@ -7,7 +7,11 @@ module GoVerbal
     end
 
     def css(css_query)
-      content.css(css_query)
+      begin
+        content.css(css_query)
+      rescue
+        raise "#{css_query} is invalid"
+      end
     end
   end
 end
