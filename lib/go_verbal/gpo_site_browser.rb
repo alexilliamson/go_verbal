@@ -7,10 +7,6 @@ module GoVerbal
     attr_accessor  :current_page
     attr_writer :internet
 
-    def initialize
-      yield self if block_given?
-    end
-
     def go_to_root
       go_to(ROOT_URL)
     end

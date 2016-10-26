@@ -6,20 +6,13 @@ RSpec.describe "Index Enumerations" do
     subject do
       VCR.use_cassette("drill_through_content") do
         index = GoVerbal.build_index
-        years = index.years
-        year = years.next
+        index.listings.next
       end
     end
 
-    it "has an url starting with https://www.gpo.gov/fdsys/browse/" do
+    it "is a month link from the GPO site" do
       expect(subject.url).to start_with("https://www.gpo.gov/fdsys/browse/")
-    end
-
-    it "has a year between 1994 and current year" do
       expect(years_since_1994).to include(subject.value)
-    end
-
-    it "has type :year" do
       expect(subject.type).to eq(:year)
     end
 
@@ -29,7 +22,6 @@ RSpec.describe "Index Enumerations" do
       first_recorded_year = 1994
 
       years = (first_recorded_year..current_year).to_a
-
       years.map(&:to_s)
     end
   end
@@ -38,20 +30,15 @@ RSpec.describe "Index Enumerations" do
     subject do
       VCR.use_cassette("drill_through_content") do
         index = GoVerbal.build_index
-        months = index.months
-        months.next
+        listings = index.listings
+        year = listings.next
+        month =listings.next
       end
     end
 
-    it "has a value from the GPOSite domain" do
+    it "is a January/month link from the gpo site" do
       expect(subject.value).to eq("January")
-    end
-
-    it "has a url from the GPOSite domain" do
       expect(subject.url).to start_with("https://www.gpo.gov/fdsys/browse/")
-    end
-
-    it "has type :month" do
       expect(subject.type).to eq(:month)
     end
   end
@@ -60,8 +47,10 @@ RSpec.describe "Index Enumerations" do
     subject do
       VCR.use_cassette("drill_through_content") do
         index = GoVerbal.build_index
-          .dates
-          .next
+        listings = index.listings
+        year = listings.next
+        month =listings.next
+        date = listings.next
       end
     end
 
@@ -78,10 +67,7 @@ RSpec.describe "Index Enumerations" do
 
     it "contains a month" do
       date_value = subject.value
-
-      month_match = month_names.detect do |month|
-        month =~ date_value
-      end
+      month_match = month_names.detect{ |month| month =~ date_value }
 
       expect(month_match).to be_truthy
     end
@@ -103,8 +89,11 @@ RSpec.describe "Index Enumerations" do
     subject do
       VCR.use_cassette("drill_through_content") do
         index = GoVerbal.build_index
-          .sections
-          .next
+        listings = index.listings
+        year = listings.next
+        month =listings.next
+        date = listings.next
+        section = listings.next
       end
     end
 

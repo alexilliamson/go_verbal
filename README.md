@@ -7,5 +7,13 @@ The Congressional Record:  Access and (coming soon) Analysis
 ```ruby
 require 'go_verbal'
 
-text_page_enum = GoVerbal.text_pages
+record = GoVerbal.congressional_record
+
+record.download(directory: "text_files", year: 2016) do |dl|
+  sleep(1)
+  if ((counter  += 1) % 100 == 10)
+    puts(dl)
+    puts(Time.now)
+  end
+end
 ```

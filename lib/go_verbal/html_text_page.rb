@@ -3,10 +3,11 @@ require_relative 'parsed_element'
 module GoVerbal
   class HTMLTextPage < ParsedElement
     attr_accessor :scraper, :index_location
-    def initialize(value:, url:, scraper: nil)
+    def initialize(value:, url:, scraper: nil, index_location: nil)
       @value = value
       @url = url
       @scraper = scraper
+      @index_location = index_location
     end
 
     def title
@@ -22,7 +23,6 @@ module GoVerbal
         url: url,
         title: title,
         date: date,
-        content: content,
         section: section
       }
     end
@@ -44,9 +44,10 @@ module GoVerbal
     end
 
     def get_content
-
         scraper.scrape_content(url)
+    end
 
+    def each_descendent
     end
   end
 end

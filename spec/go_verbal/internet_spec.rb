@@ -4,7 +4,7 @@ require 'go_verbal/internet'
 module GoVerbal
   RSpec.describe Internet do
     describe "#give_me" do
-      it "makes a request to the NetHTTP wrapper with given host and port" do
+      it "makes a request to the NetHTTP wrapper with given host and port and use_ssl" do
         net_http_library = NetHTTPWrapper.new
         internet = Internet.new(net_http_library)
 

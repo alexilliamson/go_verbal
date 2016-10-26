@@ -4,23 +4,24 @@ require 'go_verbal'
 
 RSpec.describe "GPOSite Content" do
   context "on the root page", :vcr do
-    it "has link tags with parent div class 'level1 browse-level'" do
+    subject do
       site = GoVerbal::GPOSiteBrowser.new
       site.go_to_root
-      xpath = "div[@class='level1 browse-level']/a"
+      site
+    end
 
-      links = site.xpath_query(xpath)
+    it "has link tags with parent div class 'level1 browse-level'" do
+      xpath = "div[@class='level1 browse-level']/a"
+      links = subject.xpath_query(xpath)
 
       expect(links).to_not be_empty
     end
 
     describe "link tags with parent div class 'level1 browse-level'" do
       it "has onclick containing 'fdsys'" do
-        site = GoVerbal::GPOSiteBrowser.new
-        site.go_to_root
         xpath = "div[@class='level1 browse-level']/a"
 
-        link = site.xpath_query(xpath).first
+        link = subject.xpath_query(xpath).first
         onclick = link.attributes["onclick"].to_s
         expect(onclick).to include("fdsys")
       end

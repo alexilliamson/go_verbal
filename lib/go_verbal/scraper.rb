@@ -1,11 +1,10 @@
 module GoVerbal
   class Scraper
-    attr_accessor :browser, :css_class_names, :mapping
+    attr_accessor :browser,  :mapping
 
-    def initialize(browser:, mapping: )
-      @browser = browser
-      @mapping = mapping
-      @css_class_names = mapping.css_classes
+    def initialize
+      @browser = GPOSiteBrowser.new
+      @mapping = ScrapeMapping.new
     end
 
     def collect_links(url:, link_type:)
@@ -14,7 +13,11 @@ module GoVerbal
       query = mapping.get_css_query(link_type)
 
       begin
-        links = browser.xpath_query(query)
+        query_results = browser.xpath_query(query)
+        query_results.map do |result|
+          result#OpenStruct.new(url: ROOT_URL, child_type: :year)
+        end
+        #
       rescue
         raise "Xpath query #{query} invalid at url #{url}"
       end

@@ -1,44 +1,36 @@
+require_relative 'directory'
+
 module GoVerbal
   class Download
-    attr_accessor :target_pages, :destination, :mapper
+    attr_accessor :target_pages, :directory, :mapper, :inventory, :year
 
-    def initialize(mapper:, destination:, options: )
-      @mapper = mapper
-      @destination = destination
-
-      # load_inventory(dest)
+    def initialize(directory: , year:)
+      @directory = Directory.new(directory)
+      @year = year
     end
 
-    def start(options= {})
-      target_pages = set_target_pages
-      limit = options[:limit]
+    def run(index_enumerator: )
+      listings = index_enumerator.listings(:year => year)
       counter = 0
 
-      target_pages.each do |page|
-        download_page(page)
+      listings.each do |lst|
+        if lst.kind_of?(HTMLTextPage)
+          download_page(lst)
 
-        counter += 1
-        break if counter == limit
+          yield "#{lst.value} #{lst.date}"
+        end
       end
-
     end
 
     def download_page(page)
       attributes = page.attributes
       file_name = name_file(page)
-      destination.write(file_name, attributes)
+      directory.write(file_name, attributes)
     end
 
     def name_file(page)
       url = page.url.to_s
       url.gsub(/https\:\/\/www\.gpo\.gov\/fdsys\/pkg\/.*\/html\//,'').gsub(/\..+$/,'')
-    end
-
-    def set_target_pages
-      downloaded_inventory = destination.inventory
-      index = Index.new(mapper, load_existing: downloaded_inventory)
-
-      index.text_pages
     end
   end
 end

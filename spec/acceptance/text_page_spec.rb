@@ -6,7 +6,12 @@ RSpec.describe "a Text Page" do
     subject do
       VCR.use_cassette("drill_through_content") do
         index = GoVerbal.build_index
-        text_page = index.text_pages.next
+        listings = index.listings
+        year = listings.next
+        month =listings.next
+        date = listings.next
+        section = listings.next
+        text_page = listings.next
         text_page.content
         text_page
       end

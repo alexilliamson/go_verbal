@@ -7,58 +7,23 @@ RSpec.describe "a congressional record download to file" do
   before(:each) {remove_existing_test_files}
 
   it "writes pages to yaml files" do
-    remove_existing_test_files
-
-    file_exist = File.exists?("spec/test_files/CREC-1994-01-25-pt1-PgD.yml")
-    expect{ download_one_page.call }.to change{Dir.glob(file_match_string).size}.from(0).to(2)
+    expect{ download_one_page(1994).call }.to change{File.exists?("spec/test_files/CREC-1994-01-25-pt1-PgD.yml")}.from(false).to(true)
   end
 
   it "names file from url" do
-    download_one_page.call {}
+    download_one_page(1994).call {}
     file_name = Dir.glob(file_match_string).first
 
     expect(file_name).to eq("spec/test_files/CREC-1994-01-25-pt1-PgD.yml")
   end
 
-  skip "records download progress to inventory.yml" do
-    download_one_page.call
+  it "saves title, url, date" do
+    download_one_page(1994).call {}
+    file_name = Dir.glob(file_match_string).first
 
-    inventory_file = File.join(TESTING_DIR, "inventory.yml")
-    yaml = YAML::load_file(inventory_file)
-    inventory_list = GoVerbal::InventoryList.new(yaml)
+    file_content = YAML.load_file(file_name)
 
-    puts(yaml)
-    text_page_inventory = inventory_list.text_pages(date: '1994-01-25', section: "Daily Digest")
-
-    expect(text_page_inventory.size).to eq(1)
-  end
-
-
-  context "after one page has been downloaded" do
-    describe "the first request that is made" do
-      before do
-        VCR.use_cassette("second_text_page", :allow_unused_http_interactions => false) do
-          url = 'https://www.gpo.gov/fdsys/pkg/CREC-2016-01-06/html/CREC-2016-01-06-pt1-PgD9-2.htm'
-          Net::HTTP.get_response(URI(url))
-        end
-      end
-
-      VCR.use_cassette("second_text_page") do
-        skip "is the next text page link" do
-          download = GoVerbal.download_congressional_record(directory: TESTING_DIR)
-          second_page_url = :not_a_page
-
-
-          download.start(limit: 1) do |page|
-            second_page_url = page.url
-          end
-
-          expect(second_page_url).to eq('https://www.gpo.gov/fdsys/pkg/CREC-2016-01-06/html/CREC-2016-01-06-pt1-PgD9-2.htm')
-        end
-
-
-      end
-    end
+    expect(file_content.keys).to eq([:url, :title, :date, :section])
   end
 
   def file_match_string
@@ -69,13 +34,18 @@ RSpec.describe "a congressional record download to file" do
     FileUtils.rm_rf(Dir.glob(file_match_string))
   end
 
-  def download_one_page
-    lambda do
-      VCR.use_cassette("drill_through_content") do
-        download = GoVerbal.download_congressional_record(directory: TESTING_DIR)
-
-        download.start(limit: 1)
-      end
+  def download_one_page(year)
+    if year == 1994
+      lambda do
+          VCR.use_cassette("drill_through_content") do
+            congressional_record = GoVerbal.congressional_record
+            congressional_record.download(directory: TESTING_DIR, year: year.to_s) do |dl|
+              yield dl if block_given?
+              break
+            end
+          end
+        end
+    else
     end
   end
 end
