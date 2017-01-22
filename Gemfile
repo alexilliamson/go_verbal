@@ -3,7 +3,7 @@ gem "nokogiri"
 gem "sequel"
 gem "dotenv"
 gem "pg"
-gem "rake"
+# gem "rake"
 
 gem 'rubocop', '~> 0.43.0', require: false
 
