@@ -17,3 +17,6 @@ record.download(directory: "text_files", year: 2016) do |dl|
   end
 end
 ```
+
+
+To run migrations, sequel -m db/migrations sqlite://test.db
