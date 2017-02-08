@@ -3,7 +3,6 @@ require 'go_verbal'
 
 RSpec.describe "the database" do
   it "can store a page of congressional record text in the pages table" do
-    DB = Sequel.sqlite('test.db')
     pages_table = DB[:pages]
 
     page_attributes = {

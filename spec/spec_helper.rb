@@ -2,6 +2,8 @@ require 'bundler/setup'
 Bundler.require(:default, :test)
 # require 'go_verbal'
 
+DB = Sequel.sqlite('test.db')
+
 RSpec.configure do |config|
   config.before(:all) do
     VCR.use_cassette("drill_through_text_page", :allow_unused_http_interactions => false) do
@@ -16,6 +18,10 @@ RSpec.configure do |config|
       Net::HTTP.get_response(URI(date_url))
       Net::HTTP.get_response(URI(section_url))
       Net::HTTP.get_response(URI(text_url))
+    end
+
+    config.around(:each) do |example|
+      DB.transaction(:rollback=>:always, :auto_savepoint=>true){example.run}
     end
   end
 
