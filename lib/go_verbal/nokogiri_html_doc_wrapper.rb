@@ -6,6 +6,10 @@ module GoVerbal
       @content = Nokogiri::HTML(content)
     end
 
+    def body
+      css("body").first.to_s
+    end
+
     def css(css_query)
       begin
         content.css(css_query)

@@ -6,6 +6,7 @@ Sequel.migration do
       String :title, :null=>false
       Date :date, :null=>false
       String :section, :null=>false
+      String :content
     end
   end
 
