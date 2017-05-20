@@ -7,4 +7,4 @@ Gemfile.lock
 spec/cassettes/*
 spec/test_files/*
 text_files/*
-
+*.env
