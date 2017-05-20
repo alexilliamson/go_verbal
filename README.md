@@ -17,3 +17,11 @@ record.download(directory: "text_files", year: 2016) do |dl|
   end
 end
 ```
+
+
+#To run migrations
+sequel -m db/migrations sqlite://dev.db
+
+#To reset
+sequel -m db/migrations -M 0 sqlite://dev.db
+

@@ -1,3 +1,5 @@
+test.db
+dev.db
 goverbal.sublime-project
 goverbal.sublime-workspace
 Gemfile.lock
@@ -5,3 +7,4 @@ Gemfile.lock
 spec/cassettes/*
 spec/test_files/*
 text_files/*
+

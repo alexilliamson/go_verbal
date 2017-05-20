@@ -5,6 +5,7 @@ $LOAD_PATH.unshift(File.dirname(__FILE__))
 
 require 'go_verbal/congressional_record'
 require 'go_verbal/index'
+require 'go_verbal/page_update'
 
 Dotenv.load
 

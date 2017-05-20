@@ -6,7 +6,7 @@ puts(Time.now)
 record = GoVerbal.congressional_record
 counter = 0
 
-(1998..2013).each do |y|
+(2017..2017).each do |y|
   new_dir = "text_files/#{y}"
   Dir.mkdir new_dir
   record.download(directory: new_dir, year: y) do |dl|

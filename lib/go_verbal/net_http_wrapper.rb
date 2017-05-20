@@ -1,3 +1,5 @@
+require 'net/http'
+
 module GoVerbal
   class NetHTTPWrapper
     def initialize
