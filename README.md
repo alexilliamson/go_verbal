@@ -1,9 +1,10 @@
-#go_verbal
+# go_verbal
+
 
 Ruby access to the congressional record text 
 https://www.gpo.gov/fdsys/browse/collection.action?collectionCode=CREC
 
-##download URL collection to local YAML files
+## download URL collection to local YAML files
 
 Download 2017
 
@@ -31,18 +32,20 @@ counter = 0
 end
 ```
 
-##download URL collection to local YAML files
+
+## download URL collection to local YAML files
 Load 
 
-##Database Setup
+## Database Setup
 
-###Run migrations
+### Run migrations
 sequel -m db/migrations sqlite://dev.db
 
-###Reset
+### Reset
 sequel -m db/migrations -M 0 sqlite://dev.db
 
-##Transfer YAML to DB
+## Transfer YAML to DB
+
 ```ruby
 DB = Sequel.sqlite('dev.db')
 
@@ -78,7 +81,9 @@ end
 ```
 
 
-##Populate DB with content
+
+## Populate DB with content
+
 
 
 
