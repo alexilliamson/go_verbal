@@ -5,7 +5,7 @@ gem "dotenv"
 gem "pg"
 # gem "rake"
 gem "sqlite3"
-gem 'rubocop', '~> 0.43.0', require: false
+gem 'rubocop', '~> 0.49.0', require: false
 
 group :test do
   gem "rspec"
